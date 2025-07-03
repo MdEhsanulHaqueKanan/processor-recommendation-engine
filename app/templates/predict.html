@@ -1,0 +1,63 @@
+<!-- app/templates/predict.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processor Analyzer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding: 2em; }
+        .prediction-box { background-color: #e9f7ef; border-left: 5px solid #28a745; padding: 15px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Processor Analyzer (ML)</h1>
+        <nav>
+            <a href="/">Recommendation Engine</a> | 
+            <a href="/predict">Processor Analyzer (ML)</a>
+        </nav>
+        <hr>
+        <p>Fill in the processor specifications to predict its primary function and likely wireless features.</p>
+
+        <form action="/predict" method="post">
+            <!-- ... (The form itself remains unchanged) ... -->
+            <div class="form-row">
+                <div class="form-group col-md-6"><label for="designer">Designer</label><select id="designer" name="Designer" class="form-control"><option selected>Qualcomm</option><option>Apple</option><option>Samsung</option><option>MediaTek</option><option>HiSilicon</option><option>Other</option></select></div>
+                <div class="form-group col-md-6"><label for="year_released">Year Released</label><input type="number" class="form-control" id="year_released" name="Year Released" value="2023" required></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6"><label for="num_cores">Number of Cores</label><input type="number" class="form-control" id="num_cores" name="Number of processor core(s)" value="8" required></div>
+                <div class="form-group col-md-6"><label for="feature_size">Feature Size (nm)</label><input type="number" class="form-control" id="feature_size" name="Feature Size" value="4" step="any" required></div>
+            </div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="has_performance_cores" id="has_performance_cores" value="1"><label class="form-check-label" for="has_performance_cores">Has Performance Cores (e.g., Cortex-X series)</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" name="has_5g" id="has_5g" value="1"><label class="form-check-label" for="has_5g">Supports 5G</label></div>
+            <br>
+            <button type="submit" class="btn btn-primary">Predict Features</button>
+        </form>
+
+        <!-- UPDATED BLOCK to display both prediction results -->
+        {% if function_prediction %}
+        <div class="prediction-box">
+            <h4>Prediction Results:</h4>
+            <p>
+                <strong>Predicted Function:</strong> 
+                {{ function_prediction }}
+            </p>
+            {% if wireless_prediction %}
+            <p>
+                <strong>Predicted Wireless Features:</strong>
+            </p>
+            <ul>
+                {% for feature in wireless_prediction %}
+                    <li>{{ feature }}</li>
+                {% else %}
+                    <li>None predicted.</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

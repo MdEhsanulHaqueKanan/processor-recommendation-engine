@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recommendation Results</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 2em; }
+        table { border-collapse: collapse; width: 100%; box-shadow: 0 2px 3px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        a { color: #007BFF; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Recommendation Results</h1>
+
+    {% if recommendations %}
+        <p>Found <strong>{{ recommendations|length }}</strong> matching processors.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Designer</th>
+                    <th>Serie</th>
+                    <th>Type</th>
+                    <th>Year Released</th>
+                    <th>Cores</th>
+                    <th>Feature Size (nm)</th>
+                    <th>Function</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proc in recommendations %}
+                <tr>
+                    <td>{{ proc.Designer }}</td>
+                    <td>{{ proc.Serie }}</td>
+                    <td>{{ proc.Type }}</td>
+                    <td>{{ proc['Year Released'] }}</td>
+                    <td>{{ proc['Number of processor core(s)'] | int }}</td>
+                    <td>{{ proc['Feature Size'] }}</td>
+                    <td>{{ proc.Function }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No processors found matching your criteria. Please try again with different requirements.</p>
+    {% endif %}
+    
+    <br>
+    <a href="/">← Back to Search</a>
+</body>
+</html>

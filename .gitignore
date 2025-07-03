@@ -1,0 +1,29 @@
+# .gitignore
+
+# Virtual Environment
+venv/
+*.venv
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE / Editor specific
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+
+# Instance folder (for sensitive keys, etc.)
+instance/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
