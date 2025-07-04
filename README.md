@@ -8,7 +8,7 @@ This repository showcases the entire lifecycle: from data cleaning and model tra
 
 ---
 
-_**Note:** This application is hosted on Render's free tier. The server may spin down after 15 minutes of inactivity. Please allow 30-60 seconds for the app to "wake up" on your first visit._
+_**Note:** This application is hosted on Render's free tier. The server may spin down after 15 minutes of inactivity. Please allow 3-6 mins for the app to "wake up" on your first visit._
 
 ## The ML Pipeline & Technical Deep Dive
 
