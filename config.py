@@ -5,6 +5,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     """Base configuration settings."""
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'a-default-secret-key-for-local-dev'
     DATA_FILE_PATH = os.path.join(BASE_DIR, 'data', 'Processors.xlsx')
     
     # Paths to your trained models
