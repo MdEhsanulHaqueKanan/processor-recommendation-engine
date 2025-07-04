@@ -76,3 +76,47 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* Styles for predict.html form elements */
+select.form-control {
+    padding: var(--spacing-xs);
+    border: 1px solid var(--border-color-medium);
+    border-radius: var(--border-radius);
+    height: 35px; /* Consistent height with other inputs */
+}
+
+.form-check {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Styles for the prediction results box */
+.prediction-box {
+    background-color: #e9f7ef;
+    border-left: 5px solid #28a745;
+    padding: var(--spacing-btn-x);
+    margin-top: var(--spacing-xl);
+    border-radius: var(--border-radius);
+}
+
+/* Styles for results.html table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    margin-bottom: var(--spacing-lg);
+}
+
+th, td {
+    border: 1px solid var(--border-color-medium);
+    padding: var(--spacing-sm);
+    text-align: left;
+}
+
+th {
+    background-color: #f8f9fa; /* A light grey, can be made a variable */
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* A slightly darker grey, can be a variable */
+}

@@ -47,7 +47,19 @@ def get_recommendations(requirements, data):
     display_columns = ['Designer', 'Serie', 'Type', 'Year Released', 'Number of processor core(s)', 'Feature Size', 'Function']
     display_columns = [col for col in display_columns if col in filtered_df.columns]
     
-    return filtered_df[display_columns].sort_values(by='Year Released', ascending=False)
+    result_df = filtered_df[display_columns].sort_values(by='Year Released', ascending=False)
+
+    # Rename columns to a consistent, template-friendly format
+    result_df = result_df.rename(columns={
+        'Designer': 'designer',
+        'Serie': 'serie',
+        'Type': 'type',
+        'Year Released': 'year_released',
+        'Number of processor core(s)': 'number_of_cores',
+        'Feature Size': 'feature_size',
+        'Function': 'function'
+    })
+    return result_df
 
 
 def load_ml_artifacts(function_model_path, encoder_path, wireless_model_path):
