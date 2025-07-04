@@ -23,6 +23,38 @@ function_model, function_label_encoder, wireless_model = load_ml_artifacts(
     Config.WIRELESS_PREDICTOR_PATH
 )
 
+# --- HELPER FUNCTIONS ---
+def _build_prediction_input_from_form(form):
+    """
+    Safely builds the model input dictionary from form data,
+    providing defaults for features not in the form.
+    """
+    # Default values for features the model needs but are not in the form
+    defaults = {
+        'GPU Clock': 800,
+        'Total L2 Cache': 4096,
+        'Total L3 Cache': 8192,
+        'bluetooth_version': 5.2,
+        'Semiconductor Technology': 'FinFET',
+        'Fab': 'TSMC',
+        'has_wifi_6_or_higher': True,
+        'has_nfc': True,
+        'has_efficiency_cores': True
+    }
+    
+    # Extract and convert required form data
+    input_data = {
+        'Designer': form.get('designer'),
+        'Year Released': int(form.get('year_released', 0)),
+        'Number of processor core(s)': int(form.get('num_cores', 0)),
+        'Feature Size': float(form.get('feature_size', 0.0)),
+        'has_performance_cores': form.get('has_performance_cores') == '1',
+        'has_5g': form.get('has_5g') == '1',
+    }
+    
+    # Combine form data with defaults, letting form data take precedence
+    return {**defaults, **input_data}
+
 # --- WEB ROUTES ---
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -50,46 +82,31 @@ def predict():
     wireless_prediction = None
     
     if request.method == 'POST':
-        if function_model and wireless_model:
-            try:
-                # Safely retrieve data from the form using the snake_case names from predict.html
-                designer = request.form.get('designer')
-                year_released = int(request.form.get('year_released', 0))
-                num_cores = int(request.form.get('num_cores', 0))
-                feature_size = float(request.form.get('feature_size', 0.0))
-                # For checkboxes with a hidden input, the value will be '1' if checked, '0' otherwise.
-                has_performance_cores = request.form.get('has_performance_cores') == '1'
-                has_5g = request.form.get('has_5g') == '1'
-
-                # Create the input dictionary with the exact keys the ML model expects
-                input_data = {
-                    'Year Released': year_released,
-                    'Number of processor core(s)': num_cores,
-                    'Feature Size': feature_size,
-                    'Designer': designer,
-                    'has_5g': has_5g,
-                    'has_performance_cores': has_performance_cores,
-                    # --- Hardcoded values for other features the model needs ---
-                    'GPU Clock': 800, 
-                    'Total L2 Cache': 4096, 
-                    'Total L3 Cache': 8192,
-                    'bluetooth_version': 5.2, 
-                    'Semiconductor Technology': 'FinFET', 
-                    'Fab': 'TSMC',
-                    'has_wifi_6_or_higher': True, 
-                    'has_nfc': True, 
-                    'has_efficiency_cores': True
-                }
-                
-                # Get prediction from the first model
-                function_prediction = predict_processor_function(function_model, function_label_encoder, input_data)
-                
-                # Get prediction from the second model
-                wireless_prediction = predict_wireless_features(wireless_model, input_data)
-
-            except Exception as e:
-                print(f"Error during prediction: {e}")
-                function_prediction = "Error: Could not make a prediction. Please check your inputs."
+        # Models are loaded at startup. If they failed, the app wouldn't start.
+        # A check here is fine, but a more robust app might have a health check endpoint.
+        if not (function_model and wireless_model):
+            return "Error: Models are not available.", 500
+        
+        try:
+            input_data = _build_prediction_input_from_form(request.form)
+            
+            # Get prediction from the function model
+            function_prediction = predict_processor_function(
+                function_model, function_label_encoder, input_data
+            )
+            
+            # Get prediction from the wireless features model
+            wireless_prediction = predict_wireless_features(
+                wireless_model, input_data
+            )
+        except (ValueError, TypeError) as e:
+            # Handle specific errors related to form input conversion
+            print(f"Error processing form input: {e}")
+            function_prediction = "Error: Invalid input provided. Please check your values."
+        except Exception as e:
+            # A catch-all for other unexpected errors
+            print(f"An unexpected error occurred during prediction: {e}")
+            function_prediction = "Error: Could not make a prediction due to a server error."
 
     # Render the page, passing both prediction results to the template
     return render_template('predict.html', 
