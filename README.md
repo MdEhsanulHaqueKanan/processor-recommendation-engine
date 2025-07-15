@@ -10,6 +10,15 @@ This repository showcases the entire lifecycle: from data cleaning and model tra
 
 _**Note:** This application is hosted on Render's free tier. The server may spin down after 15 minutes of inactivity. Please allow 3-6 mins for the app to "wake up" on your first visit._
 
+## Key Achievements & Results
+
+-   **High-Accuracy Predictive Models:** Developed a multi-class classification model that achieved **92.7% accuracy** in predicting a processor's primary function, with performance lifted by **2.6%** through systematic hyperparameter tuning.
+-   **Data-Driven Feature Creation:** Engineered **9 new, structured features** from raw, unstructured text fields, which were critical for both the recommendation filter and the ML models' success.
+-   **End-to-End System Deployment:** Architected and deployed a modular Flask application serving **2 distinct ML models** via **2 primary API endpoints**, fully containerized with Docker for reproducible, scalable deployment.
+-   **Robust Data Handling:** Successfully processed and analyzed a real-world dataset of over **1,000 unique processors**, demonstrating the ability to handle data cleaning and transformation at scale.
+
+---
+
 ## The ML Pipeline & Technical Deep Dive
 
 This project was more than just training a model; it was about building a reliable and production-ready system. Here's a breakdown of the key technical stages:
