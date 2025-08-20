@@ -1,47 +1,51 @@
-# Processor Recommendation & Analysis Engine: An End-to-End Machine Learning Project
+# 🧠 Processor Recommendation Engine (Original Monolithic App)
 
-[![Live App](https://img.shields.io/badge/Live_App-Open-brightgreen?style=flat-square)](https://processor-recom-engine.onrender.com)
-
-This project demonstrates my ability to build and deploy a full-stack, end-to-end machine learning application. It's a decision-support tool that uses both rule-based filtering and ML-powered predictions to help engineers and product teams analyze and select processors for smart devices.
-
-This repository showcases the entire lifecycle: from data cleaning and model training in a notebook to building a robust Flask API, containerizing with Docker, and deploying a scalable web service to the cloud.
+This repository contains the **original, monolithic version** of the Processor Recommendation & Analysis Engine. It is a complete, standalone Flask application that handles data processing, model inference, and HTML frontend rendering in a single codebase.
 
 ---
 
-_**Note:** This application is hosted on Render's free tier. The server may spin down after 15 minutes of inactivity. Please allow 3-6 mins for the app to "wake up" on your first visit._
+### ✨ Project Evolution: Now a Full-Stack Application!
 
-## Key Achievements & Results
+This project was successfully evolved into a modern, decoupled, full-stack application with a separate, interactive React frontend and a containerized Python backend API.
 
--   **High-Accuracy Predictive Models:** Developed a multi-class classification model that achieved **92.7% accuracy** in predicting a processor's primary function, with performance lifted by **2.6%** through systematic hyperparameter tuning.
--   **Data-Driven Feature Creation:** Engineered **9 new, structured features** from raw, unstructured text fields, which were critical for both the recommendation filter and the ML models' success.
--   **End-to-End System Deployment:** Architected and deployed a modular Flask application serving **2 distinct ML models** via **2 primary API endpoints**, fully containerized with Docker for reproducible, scalable deployment.
--   **Robust Data Handling:** Successfully processed and analyzed a real-world dataset of over **1,000 unique processors**, demonstrating the ability to handle data cleaning and transformation at scale.
+<div align="center">
+  <h4>New Full-Stack Version</h4>
+  <img alt="Full-Stack Processor Analysis Application Screenshot" src="./processor_recom_engine.png" width="800" />
+</div>
+
+#### 🔗 **Explore the Full-Stack Version:**
+
+| Link                               | URL                                                                                                         |
+| :--------------------------------- | :---------------------------------------------------------------------------------------------------------- |
+| 🚀 **Live Demo**                   | **[processor-analysis-frontend.vercel.app](https://processor-analysis-frontend.vercel.app/)** |
+| 🎨 **Frontend Repository (React)** | [github.com/MdEhsanulHaqueKanan/processor-analysis-frontend](https://github.com/MdEhsanulHaqueKanan/processor-analysis-frontend) |
+| ⚙️ **Backend API Repository (Flask)** | [github.com/MdEhsanulHaqueKanan/processor-recommendation-api](https://github.com/MdEhsanulHaqueKanan/processor-recommendation-api)       |
+
+*(Note: The backend server on the free tier may spin down after inactivity. Please allow up to a minute for the app to "wake up" on your first visit.)*
+
+---
+
+## Key Achievements (of this Original Version)
+
+*   **Custom-Trained ML Models (92.7% Accuracy):** Engineered the complete pipeline from data cleaning and feature engineering to training and hyperparameter tuning a multi-class classification model, lifting final performance by **2.6%**.
+*   **Data-Driven Feature Creation:** Engineered **9 new, structured features** from raw, unstructured text fields, which were critical for the ML models' success.
+*   **End-to-End Monolithic Deployment:** Architected and deployed a modular Flask application serving **2 distinct ML models**, fully containerized with Docker for reproducible deployment on Render.
+*   **Robust Data Handling:** Successfully processed and analyzed a real-world dataset of over **1,000 unique processors**.
 
 ---
 
 ## The ML Pipeline & Technical Deep Dive
 
-This project was more than just training a model; it was about building a reliable and production-ready system. Here's a breakdown of the key technical stages:
+This project was more than just training a model; it was about building a reliable system. The process involved:
 
 ### 1. Data Processing & Feature Engineering
--   **Data Source:** The core dataset was a manually curated Excel file (`Processors.xlsx`) containing specifications for numerous processors.
--   **Data Cleaning:** A key challenge was handling inconsistent string formats. I wrote functions to parse numeric values (e.g., number of cores) and boolean flags from text fields using regex and string manipulation in Pandas.
--   **Feature Engineering:** I created new, more useful features to improve model performance, such as `has_5g` and `has_wifi_6_or_higher`, by parsing unstructured text columns describing wireless capabilities.
+A key challenge was handling inconsistent string formats. I wrote functions to parse numeric values and boolean flags from text fields using regex and string manipulation in Pandas. I also engineered new, more useful features (like `has_5g`) from unstructured text columns.
 
 ### 2. Model Training & Selection
--   **Problem Framing:** The prediction task was split into two distinct ML problems:
-    1.  **Function Prediction:** A **multi-class classification** problem to predict the processor's primary role (e.g., "Application Processor with Modem").
-    2.  **Wireless Capabilities:** A **multi-label classification** problem to predict a set of supported features (e.g., "5G Support," "Wi-Fi 6+," "USB 3.0+").
--   **Model Choice:** I used Scikit-learn's `RandomForestClassifier` for the function prediction due to its robustness with tabular data. For the wireless features, a `MultiOutputClassifier` wrapping a base estimator was used to handle the multi-label nature of the output.
--   **Artifacts:** The trained models and the `LabelEncoder` for the function classes were serialized using `joblib` for easy loading in the Flask application. The entire process is documented in the `notebooks/` directory.
+The task was framed as two distinct ML problems: a **multi-class classification** problem for the processor's function and a **multi-label classification** problem for its wireless capabilities. The entire process, including model selection (`RandomForestClassifier`) and hyperparameter tuning, is documented in the `notebooks/` directory.
 
 ### 3. Deployment & MLOps
-Putting the model into production was a critical phase that required solving real-world challenges:
--   **API Development:** I built a Flask application with a clean architecture (services, routes, blueprints) to serve the model's predictions.
--   **Containerization:** The entire application, including the Python environment and all dependencies, was containerized using **Docker**. This ensures a consistent, reproducible environment from local testing to cloud deployment.
--   **Production Server:** I used **Gunicorn** as the WSGI server, a standard for production Flask applications.
--   **Performance & Memory Optimization:** To handle multiple concurrent users efficiently on a resource-constrained platform (Render's free tier), I configured Gunicorn with multiple workers and used the `--preload` flag. This loads the models into memory once in the master process, preventing each worker from creating a separate, memory-intensive copy.
--   **Static Asset Serving:** I solved the common production issue of serving static files (CSS) by integrating the **WhiteNoise** library, which allows Gunicorn to efficiently handle these requests without needing a separate web server like Nginx.
+The monolithic application was containerized using **Docker** and deployed with a **Gunicorn** production server. Performance was optimized for resource-constrained environments using Gunicorn's `--preload` flag to share model memory between workers.
 
 ---
 
@@ -57,71 +61,22 @@ Putting the model into production was a critical phase that required solving rea
 ---
 
 <details>
-<summary><strong>Click to view Application Features, Screenshots, & Setup Instructions</strong></summary>
+<summary><strong>Click to view Original App Screenshots & Local Setup</strong></summary>
 
-### Features
-This application has two main components:
-
-1.  **Recommendation Engine:** Rule-based filtering of processors based on user-defined technical criteria.
-2.  **Processor Analyzer (ML-Powered):** AI-powered predictions for a processor's function and wireless capabilities based on its specifications.
-
-### Application Screenshots
+### Application Screenshots (Original Monolithic Version)
 | Recommendation Engine | Recommendation Results | Processor Analyzer |
 | :---: | :---: | :---: |
 | ![Screenshot 1](app_ss_1.png) | ![Screenshot 2](app_ss_2.png) | ![Screenshot 3](app_ss_3.png) |
 
-### Project Structure
-```
-├── processor-recommendation-engine/
-│   ├── app/                # Main Flask application
-│   │   ├── static/         # CSS and other static assets
-│   │   ├── templates/      # HTML templates
-│   │   ├── __init__.py     # Application factory
-│   │   ├── routes.py       # Application routes
-│   │   └── services.py     # Business logic and data processing
-│   ├── data/               # Raw dataset
-│   ├── models/             # Trained ML models
-│   ├── notebooks/          # Jupyter notebooks for analysis and model training
-│   ├── config.py           # Configuration settings
-│   ├── requirements.txt    # Python dependencies
-│   ├── run.py              # Application entry point
-│   └── Dockerfile          # Instructions for building the container image
-└── ...
-```
-
-### Running the Application
+### Running the Original Application
 This project can be run locally for development or with Docker to replicate the production environment.
 
 #### Option 1: Running Locally (for Development)
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/MdEhsanulHaqueKanan/processor-recommendation-engine.git
-    cd processor-recommendation-engine
-    ```
-2.  **Create and activate a virtual environment:**
-    ```bash
-    python -m venv venv
-    # On Windows:
-    .\venv\Scripts\activate
-    # On macOS/Linux:
-    source venv/bin/activate
-    ```
-3.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  **Run the Flask development server:**
-    ```bash
-    python run.py
-    ```
+1.  **Clone the repository** and `cd` into it.
+2.  **Create and activate a virtual environment.**
+3.  **Install dependencies:** `pip install -r requirements.txt`
+4.  **Run the Flask development server:** `python run.py`
 5.  Open your browser to `http://127.0.0.1:5000`.
-
-#### Option 2: Running with Docker (Production Environment)
-1.  **Prerequisite:** Ensure [Docker Desktop](https://www.docker.com/products/docker-desktop/) is installed and running.
-2.  **Clone the repository** and `cd` into it.
-3.  **Build the Docker image:** `docker build -t processor-engine .`
-4.  **Run the container:** `docker run --rm -p 10000:10000 -e PORT=10000 -e SECRET_KEY='any-secret-key-for-local-testing' processor-engine`
-5.  Open your browser to `http://localhost:10000`.
 
 </details>
 
